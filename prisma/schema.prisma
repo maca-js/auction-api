@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  email String @unique
+  name String?
+  rating Int @default(0)
+  password String
+
+  posts Post[]
+  offers Offer[]
+  comments Comment[]
+
+  @@map("user")
+}
+
+model Post {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title String
+  description String
+  mainImgUrl String @map("main_img_url")
+  startPrice Int @default(100) @map("start_price")
+  currentPrice Int @map("current_price")
+  status RostStatus
+  winnerId String @map("winner_id")
+  // timeToFinish Int @map("time_to_finish")
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String @map("category_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  offers Offer[]
+  comments Comment[]
+
+  @@map("post")
+}
+
+enum RostStatus {
+  active
+  delivery
+  complited
+}
+
+model Category {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title String
+  isActive Boolean @map("is_active")
+  posts Post[]
+
+  @@map("category")
+}
+
+model Offer {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  price Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id")
+
+  @@map("offer")
+}
+
+model Comment {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  message String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id")
+
+  @@map("comment")
+}
