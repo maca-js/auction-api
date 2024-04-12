@@ -32,21 +32,26 @@ export class PostController {
   }
 
   @Get(':userId')
+  @Auth()
   findByUserId(@Param('userId') id: string) {
     return this.postService.findByUserId(id);
   }
 
   @Get(':id')
+  @Auth()
   findOne(@Param('id') id: string) {
     return this.postService.findOne(id);
   }
 
   @Patch(':id')
+  @Auth()
+  @UsePipes(new ValidationPipe())
   update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     return this.postService.update(id, dto);
   }
 
   @Delete(':id')
+  @Auth()
   remove(@Param('id') id: string) {
     return this.postService.remove(id);
   }
