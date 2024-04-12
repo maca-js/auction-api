@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { RostStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import {
+  UpdatePostCurrentPriceDto,
+  UpdatePostDto,
+} from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
@@ -39,6 +42,15 @@ export class PostService {
   }
 
   async update(id: string, dto: UpdatePostDto) {
+    return await this.prisma.post.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
+  }
+
+  async updateCurrentPrice(id: string, dto: UpdatePostCurrentPriceDto) {
     return await this.prisma.post.update({
       where: {
         id,

@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import {
+  UpdatePostCurrentPriceDto,
+  UpdatePostDto,
+} from './dto/update-post.dto';
 import { PostService } from './post.service';
 
 @Controller('post')
@@ -48,6 +51,16 @@ export class PostController {
   @UsePipes(new ValidationPipe())
   update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     return this.postService.update(id, dto);
+  }
+
+  @Patch('price/:id')
+  @Auth()
+  @UsePipes(new ValidationPipe())
+  updateCurrentPrice(
+    @Param('id') id: string,
+    @Body() dto: UpdatePostCurrentPriceDto,
+  ) {
+    return this.postService.updateCurrentPrice(id, dto);
   }
 
   @Delete(':id')
