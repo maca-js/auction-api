@@ -68,7 +68,7 @@ model Category {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   title String
-  isActive Boolean @map("is_active")
+  isActive Boolean? @default(true) @map("is_active")
   posts Post[]
 
   @@map("category")
