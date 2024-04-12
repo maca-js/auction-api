@@ -38,7 +38,7 @@ model Post {
   title String
   description String
   mainImgUrl String @map("main_img_url")
-  startPrice Int @default(100) @map("start_price")
+  startPrice Int @map("start_price")
   currentPrice Int @map("current_price")
   status RostStatus
   winnerId String @map("winner_id")
