@@ -14,6 +14,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import {
   UpdatePostCurrentPriceDto,
   UpdatePostDto,
+  UpdatePostStatusDto,
 } from './dto/update-post.dto';
 import { PostService } from './post.service';
 
@@ -61,6 +62,13 @@ export class PostController {
     @Body() dto: UpdatePostCurrentPriceDto,
   ) {
     return this.postService.updateCurrentPrice(id, dto);
+  }
+
+  @Patch('status/:id')
+  @Auth()
+  @UsePipes(new ValidationPipe())
+  updateStatus(@Param('id') id: string, @Body() dto: UpdatePostStatusDto) {
+    return this.postService.updateStatus(id, dto);
   }
 
   @Delete(':id')
