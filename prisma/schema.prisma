@@ -39,10 +39,10 @@ model Post {
   description String
   mainImgUrl String @map("main_img_url")
   startPrice Int @map("start_price")
+  step Int? @default(50)
   currentPrice Int @map("current_price")
   status PostStatus
   winnerId String @map("winner_id")
-  // timeToFinish Int @map("time_to_finish")
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String @map("category_id")

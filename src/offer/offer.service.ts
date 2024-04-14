@@ -19,9 +19,9 @@ export class OfferService {
       return new BadRequestException('Post is not active');
     }
 
-    if (post.currentPrice >= dto.price) {
+    if (post.currentPrice + post.step > dto.price) {
       return new BadRequestException(
-        'Price should be bigger than current price',
+        'Price should be equal or bigger than current price + step',
       );
     }
 

@@ -24,6 +24,11 @@ export class CreatePostDto {
   @Min(0)
   startPrice: number;
 
+  @IsNumber()
+  @IsOptional()
+  @Min(50)
+  step: number;
+
   @IsUUID()
   categoryId: string;
 
