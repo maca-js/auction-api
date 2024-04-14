@@ -6,8 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -25,7 +23,6 @@ export class PostController {
 
   @Post()
   @Auth()
-  @UsePipes(new ValidationPipe())
   create(@Body() dto: CreatePostDto) {
     return this.postService.create(dto);
   }
@@ -50,14 +47,12 @@ export class PostController {
 
   @Patch(':id')
   @Auth()
-  @UsePipes(new ValidationPipe())
   update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     return this.postService.update(id, dto);
   }
 
   @Patch('price/:id')
   @Auth()
-  @UsePipes(new ValidationPipe())
   updateCurrentPrice(
     @Param('id') id: string,
     @Body() dto: UpdatePostCurrentPriceDto,
@@ -67,14 +62,12 @@ export class PostController {
 
   @Patch('status/:id')
   @Auth()
-  @UsePipes(new ValidationPipe())
   updateStatus(@Param('id') id: string, @Body() dto: UpdatePostStatusDto) {
     return this.postService.updateStatus(id, dto);
   }
 
   @Patch('winner/:id')
   @Auth()
-  @UsePipes(new ValidationPipe())
   updateWinner(@Param('id') id: string, @Body() dto: UpdatePostWinnerDto) {
     return this.postService.updateWinner(id, dto);
   }

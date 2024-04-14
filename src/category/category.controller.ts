@@ -6,8 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CategoryService } from './category.service';
@@ -20,7 +18,6 @@ export class CategoryController {
 
   @Post()
   @Auth()
-  @UsePipes(new ValidationPipe())
   create(@Body() dto: CreateCategoryDto) {
     return this.categoryService.create(dto);
   }
@@ -45,7 +42,6 @@ export class CategoryController {
 
   @Patch(':id')
   @Auth()
-  @UsePipes(new ValidationPipe())
   update(@Param('id') id: string, @Body() dto: UpdateCategoryDto) {
     return this.categoryService.update(id, dto);
   }
