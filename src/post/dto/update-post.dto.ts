@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { PostStatus } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsUUID } from 'class-validator';
 import { CreatePostDto } from './create-post.dto';
 
 export class UpdatePostDto extends PartialType(CreatePostDto) {}
@@ -16,7 +16,6 @@ export class UpdatePostStatusDto {
 }
 
 export class UpdatePostWinnerDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsUUID()
   winnerId: string;
 }

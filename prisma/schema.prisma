@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -31,7 +31,7 @@ model User {
 }
 
 model Post {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -63,7 +63,7 @@ enum PostStatus {
 }
 
 model Category {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -75,7 +75,7 @@ model Category {
 }
 
 model Offer {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -91,7 +91,7 @@ model Offer {
 }
 
 model Comment {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

@@ -2,6 +2,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
   MinLength,
 } from 'class-validator';
@@ -23,9 +24,9 @@ export class CreatePostDto {
   @Min(0)
   startPrice: number;
 
-  @IsString()
+  @IsUUID()
   categoryId: string;
 
-  @IsString()
+  @IsUUID()
   userId: string;
 }
