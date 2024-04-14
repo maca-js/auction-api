@@ -6,6 +6,7 @@ import {
   UpdatePostCurrentPriceDto,
   UpdatePostDto,
   UpdatePostStatusDto,
+  UpdatePostWinnerDto,
 } from './dto/update-post.dto';
 
 @Injectable()
@@ -61,6 +62,15 @@ export class PostService {
   }
 
   async updateStatus(id: string, dto: UpdatePostStatusDto) {
+    return await this.prisma.post.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
+  }
+
+  async updateWinner(id: string, dto: UpdatePostWinnerDto) {
     return await this.prisma.post.update({
       where: {
         id,

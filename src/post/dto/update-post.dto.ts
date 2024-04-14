@@ -1,13 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { PostStatus } from '@prisma/client';
-import { IsEnum, IsNumber } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { CreatePostDto } from './create-post.dto';
 
-export class UpdatePostDto extends PartialType(CreatePostDto) {
-  // @IsOptional()
-  // @IsString()
-  // winnerId: string;
-}
+export class UpdatePostDto extends PartialType(CreatePostDto) {}
 
 export class UpdatePostCurrentPriceDto {
   @IsNumber()
@@ -17,4 +13,10 @@ export class UpdatePostCurrentPriceDto {
 export class UpdatePostStatusDto {
   @IsEnum(PostStatus)
   status: PostStatus;
+}
+
+export class UpdatePostWinnerDto {
+  @IsString()
+  @IsNotEmpty()
+  winnerId: string;
 }
