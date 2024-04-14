@@ -6,8 +6,6 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
@@ -17,7 +15,6 @@ import { AuthDto } from './dto/auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
   async login(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
@@ -28,7 +25,6 @@ export class AuthController {
     return response;
   }
 
-  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('register')
   async register(

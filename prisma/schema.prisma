@@ -38,9 +38,9 @@ model Post {
   title String
   description String
   mainImgUrl String @map("main_img_url")
-  startPrice Int @default(100) @map("start_price")
+  startPrice Int @map("start_price")
   currentPrice Int @map("current_price")
-  status RostStatus
+  status PostStatus
   winnerId String @map("winner_id")
   // timeToFinish Int @map("time_to_finish")
 
@@ -56,7 +56,7 @@ model Post {
   @@map("post")
 }
 
-enum RostStatus {
+enum PostStatus {
   active
   delivery
   complited
