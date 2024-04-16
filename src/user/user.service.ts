@@ -18,6 +18,16 @@ export class UserService {
     });
   }
 
+  getByIds(ids: string[]) {
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   getByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: {

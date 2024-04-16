@@ -14,43 +14,45 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email String @unique
-  name String?
-  rating Int @default(0)
+  email    String  @unique
+  name     String?
+  rating   Int     @default(0)
   password String
 
-  posts Post[]
-  offers Offer[]
+  posts    Post[]    @relation("user_posts")
+  offers   Offer[]   @relation("user_offers")
   comments Comment[]
+  chats    Chat[]    @relation("user_chats")
+  messages Message[] @relation("user_messages")
 
   @@map("user")
 }
 
 model Post {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title String
-  description String
-  mainImgUrl String @map("main_img_url")
-  startPrice Int @map("start_price")
-  step Int? @default(50)
-  currentPrice Int @map("current_price")
-  status PostStatus
-  winnerId String @map("winner_id")
+  title        String
+  description  String
+  mainImgUrl   String     @map("main_img_url")
+  startPrice   Int        @map("start_price")
+  step         Int?       @default(50)
+  currentPrice Int        @map("current_price")
+  status       PostStatus
+  winnerId     String     @map("winner_id")
 
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId String @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String   @map("category_id")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation("user_posts", fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
-  offers Offer[]
+  offers   Offer[]
   comments Comment[]
 
   @@map("post")
@@ -59,48 +61,75 @@ model Post {
 enum PostStatus {
   active
   delivery
-  complited
+  completed
 }
 
 model Category {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title String
+  title    String
   isActive Boolean? @default(true) @map("is_active")
-  posts Post[]
+  posts    Post[]
 
   @@map("category")
 }
 
 model Offer {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   price Int
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation("user_offers", fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String @map("post_id")
 
   @@map("offer")
 }
 
+model Chat {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  users    User[]    @relation("user_chats")
+  messages Message[] @relation("chat_messages")
+
+  @@map("chat")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  chat   Chat   @relation("chat_messages", fields: [chatId], references: [id], onDelete: Cascade)
+  chatId String @map("chat_id")
+
+  user   User   @relation("user_messages", fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  text String
+
+  @@map("message")
+}
+
 model Comment {
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   message String
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String @map("post_id")
 
   @@map("comment")
