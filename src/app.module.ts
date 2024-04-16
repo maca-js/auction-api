@@ -5,6 +5,8 @@ import { CategoryModule } from './category/category.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { OfferModule } from './offer/offer.module';
+import { ChatModule } from './chat/chat.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { OfferModule } from './offer/offer.module';
     PostModule,
     CategoryModule,
     OfferModule,
+    ChatModule,
+    MessageModule,
   ],
 })
 export class AppModule {}
