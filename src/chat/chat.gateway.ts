@@ -9,7 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from 'src/chat/dto/create-message.dto';
 import { RemoveMessageDto } from 'src/chat/dto/remove-message.dto';
-import { WSExceptionFilter } from 'src/filters/ws-exeption.filter';
+import { WSExceptionFilter } from 'src/filters/ws-exception.filter';
 import { ChatService } from './chat.service';
 
 @WebSocketGateway({
