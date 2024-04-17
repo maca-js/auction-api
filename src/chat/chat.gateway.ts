@@ -7,10 +7,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { CreateMessageDto } from 'src/chat/dto/create-message.dto';
+import { RemoveMessageDto } from 'src/chat/dto/remove-message.dto';
 import { WSExceptionFilter } from 'src/filters/ws-exeption.filter';
-import { CreateMessageDto } from 'src/message/dto/create-message.dto';
-import { RemoveMessageDto } from 'src/message/dto/remove-emssage.dto';
-import { MessageService } from 'src/message/message.service';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway({
   cors: {
@@ -20,7 +20,7 @@ import { MessageService } from 'src/message/message.service';
 // @Auth() // need to check
 @UseFilters(new WSExceptionFilter())
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private messageService: MessageService) {}
+  constructor(private chatService: ChatService) {}
 
   @WebSocketServer()
   server: Server;
@@ -35,13 +35,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('createMessage')
   async handleCreateMessage(client: Socket, dto: CreateMessageDto) {
-    await this.messageService.create(dto);
+    await this.chatService.createMessage(dto);
     client.to(dto.chatId).emit('newMessage', dto);
   }
 
   @SubscribeMessage('removeMessage')
   async handleRemoveMessage(client: Socket, dto: RemoveMessageDto) {
-    await this.messageService.remove(dto);
+    await this.chatService.removeMessage(dto);
     client.to(dto.messageId).emit('removedMessage', dto.messageId);
   }
 }
