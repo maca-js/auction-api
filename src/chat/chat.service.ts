@@ -1,7 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+} from '@nestjs/common';
+import { RemoveMessageDto } from 'src/chat/dto/remove-message.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UserService } from 'src/user/user.service';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { CreateMessageDto } from './dto/create-message.dto';
 
 @Injectable()
 export class ChatService {
@@ -81,6 +87,56 @@ export class ChatService {
     return await this.prisma.chat.delete({
       where: {
         id,
+      },
+    });
+  }
+
+  async isUserCanCreateMessage(id: string) {
+    const chat = await this.findById(id);
+
+    if (!chat) {
+      throw new BadGatewayException("Chat doesn't exist");
+    }
+
+    if (!chat.users.find((user) => user.id === id)) {
+      throw new BadGatewayException("User doesn't exist in current chat");
+    }
+  }
+
+  async isUserCanRemoveMessage(dto: RemoveMessageDto) {
+    const chat = await this.findById(dto.chatId);
+
+    if (!chat) {
+      throw new BadGatewayException("Chat doesn't exist");
+    }
+
+    const currentMessage = chat.messages.find(
+      (message) => message.id === dto.messageId,
+    );
+
+    if (!currentMessage) {
+      throw new BadGatewayException("Message doesn't exist");
+    }
+
+    if (currentMessage.userId !== dto.userId) {
+      throw new BadGatewayException('Message not correspond to user');
+    }
+  }
+
+  async createMessage(dto: CreateMessageDto) {
+    await this.isUserCanCreateMessage(dto.chatId);
+
+    return await this.prisma.message.create({
+      data: dto,
+    });
+  }
+
+  async removeMessage(dto: RemoveMessageDto) {
+    await this.isUserCanRemoveMessage(dto);
+
+    return await this.prisma.message.delete({
+      where: {
+        id: dto.messageId,
       },
     });
   }

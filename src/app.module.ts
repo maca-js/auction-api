@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
-import { PostModule } from './post/post.module';
-import { UserModule } from './user/user.module';
-import { OfferModule } from './offer/offer.module';
+import { ChatGateway } from './chat/chat.gateway';
 import { ChatModule } from './chat/chat.module';
-import { MessageModule } from './message/message.module';
+import { ChatService } from './chat/chat.service';
+import { OfferModule } from './offer/offer.module';
+import { PostModule } from './post/post.module';
+import { PrismaService } from './prisma.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { MessageModule } from './message/message.module';
     CategoryModule,
     OfferModule,
     ChatModule,
-    MessageModule,
   ],
+  providers: [ChatGateway, ChatService, PrismaService],
 })
 export class AppModule {}

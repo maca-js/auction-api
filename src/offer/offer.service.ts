@@ -16,19 +16,17 @@ export class OfferService {
     const post = await this.postService.findOne(dto.postId);
 
     if (post.status !== PostStatus.active) {
-      return new BadRequestException('Post is not active');
+      throw new BadRequestException('Post is not active');
     }
 
     if (post.currentPrice + post.step > dto.price) {
-      return new BadRequestException(
+      throw new BadRequestException(
         'Price should be equal or bigger than current price + step',
       );
     }
 
     if (post.userId === dto.userId) {
-      return new BadRequestException(
-        "You can't create offer for your own post",
-      );
+      throw new BadRequestException("You can't create offer for your own post");
     }
 
     await this.postService.updateCurrentPrice(dto.postId, {
