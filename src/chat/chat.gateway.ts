@@ -40,8 +40,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('removeMessage')
-  handleRemoveMessage(client: Socket, dto: RemoveMessageDto) {
-    this.messageService.remove(dto);
+  async handleRemoveMessage(client: Socket, dto: RemoveMessageDto) {
+    await this.messageService.remove(dto);
     client.to(dto.messageId).emit('removedMessage', dto.messageId);
   }
 }
