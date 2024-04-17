@@ -15,11 +15,11 @@ export class MessageService {
     const chat = await this.chatService.findById(id);
 
     if (!chat) {
-      throw new BadGatewayException("Chat doesn't exist");
+      return new BadGatewayException("Chat doesn't exist");
     }
 
     if (!chat.users.find((user) => user.id === id)) {
-      throw new BadGatewayException("User doesn't exist in current chat");
+      return new BadGatewayException("User doesn't exist in current chat");
     }
   }
 
@@ -27,7 +27,7 @@ export class MessageService {
     const chat = await this.chatService.findById(dto.chatId);
 
     if (!chat) {
-      throw new BadGatewayException("Chat doesn't exist");
+      return new BadGatewayException("Chat doesn't exist");
     }
 
     const currentMessage = chat.messages.find(
@@ -35,11 +35,11 @@ export class MessageService {
     );
 
     if (!currentMessage) {
-      throw new BadGatewayException("Message doesn't exist");
+      return new BadGatewayException("Message doesn't exist");
     }
 
     if (currentMessage.userId !== dto.userId) {
-      throw new BadGatewayException('Message not correspond to user');
+      return new BadGatewayException('Message not correspond to user');
     }
   }
 

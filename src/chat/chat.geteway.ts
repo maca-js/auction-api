@@ -7,10 +7,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { WSExceptionFilter } from 'src/filters/ws-exeption.filter';
 import { CreateMessageDto } from 'src/message/dto/create-message.dto';
 import { RemoveMessageDto } from 'src/message/dto/remove-emssage.dto';
 import { MessageService } from 'src/message/message.service';
-import { WSExceptionFilter } from 'src/websoket/exeption.filter';
 
 @WebSocketGateway({
   cors: {
