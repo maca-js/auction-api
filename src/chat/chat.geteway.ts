@@ -7,8 +7,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CreateMessageDto } from 'src/message/dto/create-message.dto';
+import { RemoveMessageDto } from 'src/message/dto/remove-emssage.dto';
 import { MessageService } from 'src/message/message.service';
 import { WSExceptionFilter } from 'src/websoket/exeption.filter';
 
@@ -17,7 +17,7 @@ import { WSExceptionFilter } from 'src/websoket/exeption.filter';
     origin: '*',
   },
 })
-@Auth() // need to check
+// @Auth() // need to check
 @UseFilters(new WSExceptionFilter())
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private messageService: MessageService) {}
@@ -34,14 +34,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('createMessage')
-  async handleCreateMessage(client: Socket, messageDto: CreateMessageDto) {
-    await this.messageService.create(messageDto);
-    client.to(messageDto.chatId).emit('newMessage', messageDto);
+  async handleCreateMessage(client: Socket, dto: CreateMessageDto) {
+    await this.messageService.create(dto);
+    client.to(dto.chatId).emit('newMessage', dto);
   }
 
-  @SubscribeMessage('deleteMessage')
-  handleDeleteMessage(client: Socket, id: string) {
-    this.messageService.remove(id);
-    client.to(id).emit('deletedMessage', id);
+  @SubscribeMessage('removeMessage')
+  handleRemoveMessage(client: Socket, dto: RemoveMessageDto) {
+    this.messageService.remove(dto);
+    client.to(dto.messageId).emit('removedMessage', dto.messageId);
   }
 }

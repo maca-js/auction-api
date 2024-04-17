@@ -3,11 +3,11 @@ import { WsException } from '@nestjs/websockets';
 
 @Catch()
 export class WSExceptionFilter implements WsExceptionFilter {
-  catch(_exception: WsException, host: ArgumentsHost) {
+  catch(exception: WsException, host: ArgumentsHost) {
     const socket = host.switchToWs().getClient();
     socket.emit('exception', {
       status: 'error',
-      message: 'Message is invalid',
+      message: exception.message,
     });
   }
 }
