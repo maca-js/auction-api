@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PostStatus } from '@prisma/client';
 import { PostService } from 'src/post/post.service';
 import { PrismaService } from 'src/prisma.service';
+import { RedisService } from 'src/redis/redis.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
 
@@ -10,10 +11,14 @@ export class OfferService {
   constructor(
     private prisma: PrismaService,
     private postService: PostService,
+    private redisService: RedisService,
   ) {}
 
   async create(dto: CreateOfferDto) {
     const post = await this.postService.findOne(dto.postId);
+
+    const offerExpiresTime = post.updatedAt;
+    offerExpiresTime.setHours(offerExpiresTime.getHours() + 24);
 
     if (post.status !== PostStatus.active) {
       throw new BadRequestException('Post is not active');
@@ -32,6 +37,12 @@ export class OfferService {
     await this.postService.updateCurrentPrice(dto.postId, {
       currentPrice: dto.price,
     });
+
+    await this.redisService.setString(
+      dto.postId,
+      offerExpiresTime.toString(),
+      'post',
+    );
 
     return await this.prisma.offer.create({
       data: dto,
