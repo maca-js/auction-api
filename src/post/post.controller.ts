@@ -79,6 +79,12 @@ export class PostController {
     return this.postService.like(id, req.user.id);
   }
 
+  @Patch('unlike/:id')
+  @Auth()
+  unlike(@Param('id') id: string, @Req() req) {
+    return this.postService.unlike(id, req.user.id);
+  }
+
   @Delete(':id')
   @Auth()
   remove(@Param('id') id: string) {
