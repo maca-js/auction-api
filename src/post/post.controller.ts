@@ -34,6 +34,12 @@ export class PostController {
     return this.postService.findAll();
   }
 
+  @Get('/liked')
+  @Auth()
+  getLiked(@Req() req) {
+    return this.postService.getLiked(req.user.id);
+  }
+
   @Get(':userId')
   @Auth()
   findByUserId(@Param('userId') id: string) {

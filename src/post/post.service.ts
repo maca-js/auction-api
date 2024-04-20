@@ -133,6 +133,18 @@ export class PostService {
     });
   }
 
+  async getLiked(userId: string) {
+    return await this.prisma.post.findMany({
+      where: {
+        likes: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
+  }
+
   async remove(id: string) {
     return await this.prisma.post.delete({
       where: {
