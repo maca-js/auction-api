@@ -28,6 +28,7 @@ model User {
   comments Comment[]
   chats    Chat[]    @relation("user_chats")
   messages Message[] @relation("user_messages")
+  likedPosts PostLike[]
 
   @@map("user")
 }
@@ -54,6 +55,7 @@ model Post {
 
   offers   Offer[]
   comments Comment[]
+  likes    PostLike[]
 
   @@map("post")
 }
@@ -62,6 +64,19 @@ enum PostStatus {
   active
   delivery
   completed
+}
+
+model PostLike {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String @map("post_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@map("post_like")
 }
 
 model Category {

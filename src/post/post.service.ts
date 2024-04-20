@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PostStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
@@ -29,13 +29,20 @@ export class PostService {
   }
 
   async findAll() {
-    return this.prisma.post.findMany({});
+    return this.prisma.post.findMany({
+      include: {
+        likes: true,
+      },
+    });
   }
 
   async findByUserId(userId: string) {
     return this.prisma.post.findMany({
       where: {
         userId,
+      },
+      include: {
+        likes: true,
       },
     });
   }
@@ -47,6 +54,7 @@ export class PostService {
       },
       include: {
         offers: true,
+        likes: true,
       },
     });
   }
@@ -84,6 +92,56 @@ export class PostService {
         id,
       },
       data: dto,
+    });
+  }
+
+  async findLikeByPostAndUser(postId: string, userId: string) {
+    return await this.prisma.postLike.findFirst({
+      where: {
+        postId,
+        userId,
+      },
+    });
+  }
+
+  async like(postId: string, userId: string) {
+    const like = await this.findLikeByPostAndUser(postId, userId);
+
+    if (like) {
+      throw new BadGatewayException('User already liked this post');
+    }
+
+    return await this.prisma.postLike.create({
+      data: {
+        userId,
+        postId,
+      },
+    });
+  }
+
+  async unlike(postId: string, userId: string) {
+    const like = await this.findLikeByPostAndUser(postId, userId);
+
+    if (!like) {
+      throw new BadGatewayException('User is not liked this post');
+    }
+
+    return await this.prisma.postLike.delete({
+      where: {
+        id: like.id,
+      },
+    });
+  }
+
+  async getLiked(userId: string) {
+    return await this.prisma.post.findMany({
+      where: {
+        likes: {
+          some: {
+            userId,
+          },
+        },
+      },
     });
   }
 
