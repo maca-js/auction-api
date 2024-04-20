@@ -29,13 +29,20 @@ export class PostService {
   }
 
   async findAll() {
-    return this.prisma.post.findMany({});
+    return this.prisma.post.findMany({
+      include: {
+        likes: true,
+      },
+    });
   }
 
   async findByUserId(userId: string) {
     return this.prisma.post.findMany({
       where: {
         userId,
+      },
+      include: {
+        likes: true,
       },
     });
   }
@@ -47,6 +54,7 @@ export class PostService {
       },
       include: {
         offers: true,
+        likes: true,
       },
     });
   }
@@ -84,6 +92,15 @@ export class PostService {
         id,
       },
       data: dto,
+    });
+  }
+
+  async like(postId: string, userId: string) {
+    return await this.prisma.postLike.create({
+      data: {
+        userId,
+        postId,
+      },
     });
   }
 

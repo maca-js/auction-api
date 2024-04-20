@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -70,6 +71,12 @@ export class PostController {
   @Auth()
   updateWinner(@Param('id') id: string, @Body() dto: UpdatePostWinnerDto) {
     return this.postService.updateWinner(id, dto);
+  }
+
+  @Patch('like/:id')
+  @Auth()
+  like(@Param('id') id: string, @Req() req) {
+    return this.postService.like(id, req.user.id);
   }
 
   @Delete(':id')
