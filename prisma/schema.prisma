@@ -25,7 +25,6 @@ model User {
 
   posts    Post[]    @relation("user_posts")
   offers   Offer[]   @relation("user_offers")
-  comments Comment[]
   chats    Chat[]    @relation("user_chats")
   messages Message[] @relation("user_messages")
   likedPosts PostLike[]
@@ -54,7 +53,6 @@ model Post {
   userId String @map("user_id")
 
   offers   Offer[]
-  comments Comment[]
   likes    PostLike[]
 
   @@map("post")
@@ -134,18 +132,3 @@ model Message {
   @@map("message")
 }
 
-model Comment {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  message String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId String @map("post_id")
-
-  @@map("comment")
-}
