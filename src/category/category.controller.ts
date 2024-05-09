@@ -12,7 +12,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
-@Controller('category')
+@Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
@@ -29,13 +29,11 @@ export class CategoryController {
   }
 
   @Get('active')
-  @Auth()
   findActive() {
     return this.categoryService.findActive();
   }
 
   @Get(':id')
-  @Auth()
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);
   }
