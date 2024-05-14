@@ -53,7 +53,16 @@ export class PostService {
         id,
       },
       include: {
-        offers: true,
+        offers: {
+          include: {
+            user: {
+              select: {
+                email: true,
+                name: true,
+              },
+            },
+          },
+        },
         likes: true,
       },
     });

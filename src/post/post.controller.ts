@@ -29,7 +29,6 @@ export class PostController {
   }
 
   @Get()
-  @Auth()
   findAll() {
     return this.postService.findAll();
   }
@@ -40,14 +39,12 @@ export class PostController {
     return this.postService.getLiked(req.user.id);
   }
 
-  @Get(':userId')
-  @Auth()
+  @Get('/user/:userId')
   findByUserId(@Param('userId') id: string) {
     return this.postService.findByUserId(id);
   }
 
   @Get(':id')
-  @Auth()
   findOne(@Param('id') id: string) {
     return this.postService.findOne(id);
   }
