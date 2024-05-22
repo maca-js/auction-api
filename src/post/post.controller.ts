@@ -44,6 +44,11 @@ export class PostController {
     return this.postService.findByUserId(id);
   }
 
+  @Get('/category/:categoryId')
+  findByCategoryId(@Param('categoryId') id: string) {
+    return this.postService.findByCategoryId(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postService.findOne(id);

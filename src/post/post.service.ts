@@ -47,6 +47,17 @@ export class PostService {
     });
   }
 
+  async findByCategoryId(categoryId: string) {
+    return this.prisma.post.findMany({
+      where: {
+        categoryId,
+      },
+      include: {
+        likes: true,
+      },
+    });
+  }
+
   async findOne(id: string) {
     return await this.prisma.post.findUnique({
       where: {
