@@ -55,6 +55,9 @@ export class PostService {
       include: {
         likes: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 
@@ -72,6 +75,9 @@ export class PostService {
                 name: true,
               },
             },
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
         likes: true,
