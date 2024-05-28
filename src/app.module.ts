@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
-import { CategoryModule } from './category/category.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatModule } from './chat/chat.module';
 import { ChatService } from './chat/chat.service';
@@ -18,7 +17,6 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
     PostModule,
-    CategoryModule,
     OfferModule,
     ChatModule,
   ],

@@ -192,8 +192,11 @@ export class PostService {
 
       if (now >= date) {
         const post = await this.findOne(postId);
+        const winnerId = post.offers.length
+          ? post.offers[post.offers.length - 1].userId
+          : null;
         await this.updateWinner(postId, {
-          winnerId: post.offers[post.offers.length - 1].userId,
+          winnerId: winnerId,
         });
         await this.updateStatus(postId, { status: PostStatus.delivery });
         await this.redisService.deleteKey(key);

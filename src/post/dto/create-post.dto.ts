@@ -29,7 +29,6 @@ export class CreatePostDto {
   @Min(50)
   step: number;
 
-  @IsUUID()
   categoryId: string;
 
   @IsUUID()

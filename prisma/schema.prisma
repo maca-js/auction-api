@@ -46,7 +46,6 @@ model Post {
   status       PostStatus
   winnerId     String     @map("winner_id")
 
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String   @map("category_id")
 
   user   User   @relation("user_posts", fields: [userId], references: [id], onDelete: Cascade)
@@ -75,18 +74,6 @@ model PostLike {
   userId String @map("user_id")
 
   @@map("post_like")
-}
-
-model Category {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  title    String
-  isActive Boolean? @default(true) @map("is_active")
-  posts    Post[]
-
-  @@map("category")
 }
 
 model Offer {
