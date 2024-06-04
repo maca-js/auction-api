@@ -91,14 +91,14 @@ export class ChatService {
     });
   }
 
-  async isUserCanCreateMessage(id: string) {
-    const chat = await this.findById(id);
+  async isUserCanCreateMessage(chatId: string, userId: string) {
+    const chat = await this.findById(chatId);
 
     if (!chat) {
       throw new BadGatewayException("Chat doesn't exist");
     }
 
-    if (!chat.users.find((user) => user.id === id)) {
+    if (!chat.users.find((user) => user.id === userId)) {
       throw new BadGatewayException("User doesn't exist in current chat");
     }
   }
@@ -124,7 +124,7 @@ export class ChatService {
   }
 
   async createMessage(dto: CreateMessageDto) {
-    await this.isUserCanCreateMessage(dto.chatId);
+    await this.isUserCanCreateMessage(dto.chatId, dto.userId);
 
     return await this.prisma.message.create({
       data: dto,
