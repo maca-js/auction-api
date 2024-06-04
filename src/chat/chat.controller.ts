@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
-import { GetChatsDto } from './dto/get-chats.dto';
 
 @Controller('chats')
 export class ChatController {
@@ -16,8 +15,8 @@ export class ChatController {
 
   @Get()
   @Auth()
-  findAllByUser(@Body() dto: GetChatsDto) {
-    return this.chatService.findAllByUser(dto.id);
+  findAllByUser(@Param('userId') userId: string) {
+    return this.chatService.findAllByUser(userId);
   }
 
   @Get(':id')
