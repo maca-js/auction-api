@@ -17,7 +17,6 @@ import { ChatService } from './chat.service';
     origin: '*',
   },
 })
-// @Auth() // need to check
 @UseFilters(new WSExceptionFilter())
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private chatService: ChatService) {}
@@ -33,15 +32,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client disconnected: ${client.id}`);
   }
 
+  @SubscribeMessage('joinChat')
+  handleJoinChat(client: Socket, chatId: string) {
+    client.join(chatId);
+    console.log(`Client ${client.id} joined chat ${chatId}`);
+  }
+
+  @SubscribeMessage('leaveChat')
+  handleLeaveChat(client: Socket, chatId: string) {
+    client.leave(chatId);
+    console.log(`Client ${client.id} left chat ${chatId}`);
+  }
+
   @SubscribeMessage('createMessage')
-  async handleCreateMessage(client: Socket, dto: CreateMessageDto) {
-    await this.chatService.createMessage(dto);
-    client.to(dto.chatId).emit('newMessage', dto);
+  async handleCreateMessage(_: Socket, dto: CreateMessageDto) {
+    const createdMessage = await this.chatService.createMessage(dto);
+    this.server.to(dto.chatId).emit('newMessage', createdMessage);
   }
 
   @SubscribeMessage('removeMessage')
-  async handleRemoveMessage(client: Socket, dto: RemoveMessageDto) {
+  async handleRemoveMessage(_: Socket, dto: RemoveMessageDto) {
     await this.chatService.removeMessage(dto);
-    client.to(dto.messageId).emit('removedMessage', dto.messageId);
+    this.server.to(dto.chatId).emit('removedMessage', dto.messageId);
   }
 }
