@@ -44,8 +44,26 @@ export class OfferService {
       'post',
     );
 
-    return await this.prisma.offer.create({
+    const createdOffer = await this.prisma.offer.create({
       data: dto,
+    });
+
+    return await this.getById(createdOffer.id);
+  }
+
+  async getById(id: string) {
+    return await this.prisma.offer.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        user: {
+          select: {
+            email: true,
+            name: true,
+          },
+        },
+      },
     });
   }
 
