@@ -112,7 +112,7 @@ export class PostService {
     });
   }
 
-  async updateWinner(id: string, dto: UpdatePostWinnerDto) {
+  async updateWinner(id: string | null, dto: UpdatePostWinnerDto) {
     return await this.prisma.post.update({
       where: {
         id,
@@ -195,10 +195,15 @@ export class PostService {
         const winnerId = post.offers.length
           ? post.offers[post.offers.length - 1].userId
           : null;
-        await this.updateWinner(postId, {
-          winnerId: winnerId,
-        });
-        await this.updateStatus(postId, { status: PostStatus.delivery });
+
+        if (winnerId) {
+          await this.updateWinner(postId, {
+            winnerId: winnerId,
+          });
+          await this.updateStatus(postId, { status: PostStatus.delivery });
+        } else {
+          await this.updateStatus(postId, { status: PostStatus.completed });
+        }
         await this.redisService.deleteKey(key);
       }
     }
