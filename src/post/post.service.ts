@@ -18,7 +18,7 @@ export class PostService {
     private redisService: RedisService,
   ) {}
   async create(dto: CreatePostDto) {
-    return await this.prisma.post.create({
+    const post = await this.prisma.post.create({
       data: {
         ...dto,
         currentPrice: dto.startPrice,
@@ -26,6 +26,13 @@ export class PostService {
         winnerId: '',
       },
     });
+
+    const expiresTime = post.createdAt;
+    expiresTime.setHours(expiresTime.getHours() + 24);
+
+    await this.redisService.setString(post.id, expiresTime.toString(), 'post');
+
+    return post;
   }
 
   async findAll() {
