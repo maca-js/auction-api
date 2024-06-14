@@ -25,16 +25,25 @@ export class OfferService {
       throw new BadRequestException('Post is not active');
     }
 
-    if (isPostOffers && post.currentPrice + post.step > dto.price) {
-      throw new BadRequestException(
-        'Price should be equal or bigger than current price + step',
-      );
-    }
-
     if (!isPostOffers && post.startPrice > dto.price) {
       throw new BadRequestException(
         'Price should be equal or bigger than start price',
       );
+    }
+
+    if (post.userId === dto.userId) {
+      throw new BadRequestException("You can't create offer for your own post");
+    }
+
+    if (isPostOffers) {
+      if (post.currentPrice + post.step > dto.price) {
+        throw new BadRequestException(
+          'Price should be equal or bigger than current price + step',
+        );
+      }
+      if (post.offers[post.offers.length - 1].userId === dto.userId) {
+        throw new BadRequestException("You can't create 2 offers is a row");
+      }
     }
 
     if (post.userId === dto.userId) {
