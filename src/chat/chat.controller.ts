@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
@@ -15,7 +23,7 @@ export class ChatController {
 
   @Get()
   @Auth()
-  findAllByUser(@Param('userId') userId: string) {
+  findAllByUser(@Query('userId') userId: string) {
     return this.chatService.findAllByUser(userId);
   }
 
