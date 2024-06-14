@@ -31,10 +31,13 @@ export class ChatService {
     const users = await this.userService.getByIds(dto.users);
     const mappedUsers = users.map((user) => ({ id: user.id }));
 
-    const isChatExist = await this.findOneByUsers([users[0].id, users[1].id]);
+    const existingChat = await this.findOneByUsers([users[0].id, users[1].id]);
 
-    if (isChatExist) {
-      throw new BadRequestException('Chat already exist');
+    if (existingChat) {
+      throw new BadRequestException({
+        message: `Chat already exist`,
+        chatId: existingChat.id,
+      });
     }
 
     return await this.prisma.chat.create({
