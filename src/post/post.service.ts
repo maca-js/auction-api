@@ -21,7 +21,7 @@ export class PostService {
     const post = await this.prisma.post.create({
       data: {
         ...dto,
-        currentPrice: dto.startPrice,
+        currentPrice: 0,
         status: PostStatus['active'],
         winnerId: '',
       },

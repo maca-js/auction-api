@@ -16,6 +16,7 @@ export class OfferService {
 
   async create(dto: CreateOfferDto) {
     const post = await this.postService.findOne(dto.postId);
+    const isPostOffers = !!post.offers.length;
 
     const offerExpiresTime = post.updatedAt;
     offerExpiresTime.setHours(offerExpiresTime.getHours() + 24);
@@ -24,9 +25,15 @@ export class OfferService {
       throw new BadRequestException('Post is not active');
     }
 
-    if (post.currentPrice + post.step > dto.price) {
+    if (isPostOffers && post.currentPrice + post.step > dto.price) {
       throw new BadRequestException(
         'Price should be equal or bigger than current price + step',
+      );
+    }
+
+    if (!isPostOffers && post.startPrice > dto.price) {
+      throw new BadRequestException(
+        'Price should be equal or bigger than start price',
       );
     }
 
